@@ -1,0 +1,3 @@
+display_name: KY Markdown Rebuilder
+short_description: Rebuild visual documents into page-aligned Markdown.
+default_prompt: Use $ky-markdown-rebuilder to convert this visual document into reliable page-aligned Markdown, then optionally create a reader-friendly version.
