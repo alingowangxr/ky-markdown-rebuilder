@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -21,7 +22,13 @@ from pathlib import Path
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", help="PDF, PPT, or PPTX file.")
-    parser.add_argument("--out-dir", required=True, help="Output directory for PNG pages.")
+    parser.add_argument(
+        "out_dir_positional",
+        nargs="?",
+        default=None,
+        help="Output directory for PNG pages (same as --out-dir).",
+    )
+    parser.add_argument("--out-dir", help="Output directory for PNG pages.")
     parser.add_argument("--dpi", type=int, default=150, help="Render DPI for pdftoppm.")
     parser.add_argument("--prefix", default="page", help="Output image prefix.")
     parser.add_argument(
@@ -29,7 +36,13 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Remove existing rendered images with the same prefix before rendering.",
     )
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.out_dir and args.out_dir_positional and args.out_dir != args.out_dir_positional:
+        parser.error("output directory given twice with different values")
+    args.out_dir = args.out_dir or args.out_dir_positional
+    if not args.out_dir:
+        parser.error("output directory required: pass it positionally or via --out-dir")
+    return args
 
 
 def require(command: str) -> str:
@@ -69,18 +82,54 @@ def run_quiet(command: list[str]) -> None:
         print(filtered_stderr)
 
 
+def normalize_padding(out_dir: Path, prefix: str) -> None:
+    """Pad page numbers to a uniform width of at least 2 digits.
+
+    pdftoppm pads by the digit count of the last page, so a 2-page document
+    yields page-1.png while a 19-page one yields page-07.png. Downstream
+    tools expect page-01.png at minimum.
+    """
+    pattern = re.compile(rf"^{re.escape(prefix)}-(\d+)\.png$")
+    numbered = []
+    for path in out_dir.iterdir():
+        match = pattern.match(path.name)
+        if match:
+            numbered.append((int(match.group(1)), path))
+    if not numbered:
+        return
+    width = max(2, len(str(max(number for number, _ in numbered))))
+    for number, path in numbered:
+        target = out_dir / f"{prefix}-{number:0{width}d}.png"
+        if path != target:
+            path.rename(target)
+
+
 def render_pdf(pdf: Path, out_dir: Path, dpi: int, prefix: str) -> None:
     pdftoppm = require("pdftoppm")
     out_dir.mkdir(parents=True, exist_ok=True)
     run_quiet(
         [pdftoppm, "-png", "-r", str(dpi), str(pdf), str(out_dir / prefix)],
     )
+    normalize_padding(out_dir, prefix)
 
 
 def ppt_to_pdf(src: Path, tmp_dir: Path) -> Path:
     soffice = require("soffice")
+    # A dedicated throwaway profile avoids the headless "User installation
+    # could not be completed" fatal error seen with shared/default profiles.
+    profile = tmp_dir / "lo-profile"
+    profile.mkdir(parents=True, exist_ok=True)
     run_quiet(
-        [soffice, "--headless", "--convert-to", "pdf", "--outdir", str(tmp_dir), str(src)],
+        [
+            soffice,
+            "--headless",
+            f"-env:UserInstallation=file://{profile}",
+            "--convert-to",
+            "pdf",
+            "--outdir",
+            str(tmp_dir),
+            str(src),
+        ],
     )
     pdf = tmp_dir / f"{src.stem}.pdf"
     if not pdf.exists():

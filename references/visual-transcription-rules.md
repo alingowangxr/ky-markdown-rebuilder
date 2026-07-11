@@ -17,14 +17,14 @@ Keep the final Markdown concise. The goal is reliable content, not pixel-perfect
 
 For visual decks, include the page map in the final output when it improves reliability. Do not hide it in analysis only.
 
-Recommended page section fields:
+Page section fields are LOCKED (see Output Contract in SKILL.md). The only accepted labels, always as H3 headings, always these exact Chinese strings regardless of document language:
 
-- Page purpose
-- Layout map
-- Confirmed content by region
-- Visual notes
+- `### 页面目的`
+- `### 布局地图`
+- `### 按区域确认内容`（区域用 `#### 区域 N：<位置>` 分组）
+- `### 视觉备注`
 
-Use a shorter form only for title, transition, or mostly linear text pages.
+Title, transition, or mostly linear text pages keep all four sections but may reduce each to a single bullet.
 
 ## Forbidden Anti-Patterns
 
@@ -79,6 +79,23 @@ Use a table when labels are visible. If labels are unclear, describe quadrants b
 ### Table-Like Graphic
 
 Rebuild as a Markdown table if rows and columns are legible. If not, use grouped bullets.
+
+### Merged Cells and Multi-Row Headers (LOCKED)
+
+These three rules are fixed — never choose a different convention per run:
+
+1. **Horizontal merge (跨列)**: repeat the merged content in EVERY spanned column of that row. `งบประมาณ` spanning 2 columns → `| งบประมาณ | งบประมาณ |`. Applies to header and body rows alike; column count must stay aligned.
+2. **Vertical merge (跨行)**: write the content in the FIRST row only; leave the corresponding cells in continuation rows EMPTY. Never repeat vertically-merged content in later rows — an empty cell means "merged from above", a repeated value reads as a second data point.
+3. **Multi-row header (多行表头)**: Markdown allows one header row, so the FIRST header row becomes the Markdown header; every remaining header row becomes the first body row(s), in original order. Do not fold multiple header rows into one cell with `<br>` and do not drop sub-header rows.
+
+Example — a two-row header where columns 1-2 are vertically merged and two groups span horizontally:
+
+```markdown
+| รายการ/แหล่งเงิน | หน่วยนับ | งบประมาณ | งบประมาณ | ประมาณการ** | ประมาณการ** |
+| --- | --- | --- | --- | --- | --- |
+| | | ปีที่ 1 แผน | ปีที่ 2 แผน | ปีที่ 3 แผน | ปีที่ 4 แผน |
+| รายการที่ 1 : ... | ไร่ | 10,000 | | | 25,000 |
+```
 
 ### Card Grid
 
@@ -158,6 +175,22 @@ Start from the center node, then describe surrounding categories clockwise or by
 - Right: ...
 - Bottom: ...
 - Left: ...
+
+### Formulas and Equations
+
+Chemistry and math notation uses inline `<sub>`/`<sup>` HTML, never code fences and never plain-text approximations:
+
+- `Zn + H<sub>2</sub>SO<sub>4</sub> = ZnSO<sub>4</sub> + H<sub>2</sub>↑`
+- `E = mc<sup>2</sup>`
+
+Preserve arrows (↑ ↓ →), condition annotations above arrows as parenthetical notes, and equation numbering when visible.
+
+### Textbook / Educational Page
+
+- Keep the page's own content headings (表1-1, 实验1-2, 讨论) as `####` headings inside 按区域确认内容; do not replace the locked four-section skeleton with them.
+- Boxed tips or callouts become `> **提示**` blockquotes.
+- An illustration is described in place: bold caption + one-line description of what the image shows. Never embed the whole source page screenshot as if it were the illustration.
+- Do not invent an H1 for a page that has none; follow the Output Contract rule (`# <自拟标题>（自拟）`).
 
 ## Uncertainty Rules
 

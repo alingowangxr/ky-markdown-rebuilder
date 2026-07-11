@@ -10,6 +10,28 @@ from pathlib import Path
 
 IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".webp"}
 
+SLIDE_MARKER_RE = re.compile(r"<!--\s*Slide number:\s*(\d+)\s*-->", flags=re.IGNORECASE)
+
+
+def split_pages(raw_text: str) -> list[str]:
+    """Split raw Markdown into pages.
+
+    Supports form-feed breaks (pdftotext style) and MarkItDown's
+    ``<!-- Slide number: N -->`` markers for PPT/PPTX sources.
+    """
+    if "\f" in raw_text:
+        return raw_text.split("\f")
+    matches = list(SLIDE_MARKER_RE.finditer(raw_text))
+    if matches:
+        pages: dict[int, str] = {}
+        for index, match in enumerate(matches):
+            start = match.end()
+            end = matches[index + 1].start() if index + 1 < len(matches) else len(raw_text)
+            pages[int(match.group(1))] = raw_text[start:end]
+        total = max(pages)
+        return [pages.get(number, "") for number in range(1, total + 1)]
+    return [raw_text]
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -59,7 +81,7 @@ def main() -> None:
     out = Path(args.out)
 
     raw_text = raw.read_text(encoding="utf-8", errors="ignore")
-    text_pages = raw_text.split("\f")
+    text_pages = split_pages(raw_text)
     images = sorted(
         (
             p for p in pages_dir.iterdir()
