@@ -21,35 +21,35 @@ Purpose: reliable source of truth, one section per page/slide/screen.
 Template (validation phase, screenshots retained):
 
 ```markdown
-# 文档标题
+# 文件標題
 
-> 重建说明：模式 deep-visual；来源 `source.pdf`；共 15 页；原图逐页查看 15/15 页。
+> 重建說明：模式 deep-visual；來源 `source.pdf`；共 15 頁；原圖逐頁查看 15/15 頁。
 
-## Page 01: 页标题（跟随原文语言）
+## Page 01: 頁標題（跟隨原文語言）
 
-源图：[page-01.png](pages/page-01.png)
+源圖：[page-01.png](pages/page-01.png)
 
-### 页面目的
-
-- ...
-
-### 布局地图
+### 頁面目的
 
 - ...
 
-### 按区域确认内容
+### 佈局地圖
 
-#### 区域 1：左侧 2x2 卡片区
+- ...
+
+### 按區域確認內容
+
+#### 區域 1：左側 2x2 卡片區
 
 ...
 
-### 视觉备注
+### 視覺備註
 
 - ...
 
-## Page 02: 页标题
+## Page 02: 頁標題
 
-源图：[page-02.png](pages/page-02.png)
+源圖：[page-02.png](pages/page-02.png)
 
 ...
 ```
@@ -57,11 +57,11 @@ Template (validation phase, screenshots retained):
 Rules:
 
 - Exactly one `## Page NN: Title` heading per page; half-width colon; zero-padded numbers (min 2 digits). Image inputs use `## Region NN:`, HTML uses `## Screen NN:`, with the same inner template.
-- The four H3 labels are the only accepted spellings: `### 页面目的` / `### 布局地图` / `### 按区域确认内容` / `### 视觉备注`. No English, no bare-text-with-colon, no other heading level.
+- The four H3 labels are the only accepted spellings: `### 頁面目的` / `### 佈局地圖` / `### 按區域確認內容` / `### 視覺備註`. No English, no bare-text-with-colon, no other heading level.
 - Exactly one source line per section, directly under the `##` heading:
-  - validation phase: `源图：[page-NN.png](pages/page-NN.png)`
-  - final deliverable without screenshots: `源页：第 N 页` (PDF/scan) or `源页：Slide NN` (PPT) or `源图：<原始输入文件名>` (single image)
-- The reconstruction note reports the TRUE original-resolution inspection count (`原图逐页查看 N/M 页`); thumbnails do not count.
+  - validation phase: `源圖：[page-NN.png](pages/page-NN.png)`
+  - final deliverable without screenshots: `源頁：第 N 頁` (PDF/scan) or `源頁：Slide NN` (PPT) or `源圖：<原始輸入文件名>` (single image)
+- The reconstruction note reports the TRUE original-resolution inspection count (`原圖逐頁查看 N/M 頁`); thumbnails do not count.
 - Keep content from that page only; preserve visible sequence over inferred grouping.
 - Use tables for structured visual content; do not collapse a dense slide into a generic summary; do not wrap page bodies in code fences.
 - Title/transition pages keep all four sections, each may be a single bullet.
@@ -74,30 +74,30 @@ Purpose: rebuild workbook content without forcing page/slide semantics.
 Template:
 
 ```markdown
-# 工作簿标题
+# 工作簿標題
 
-> 重建说明：模式 page-aligned；来源 `book.xlsx`；共 4 表；原图逐页查看 4/4 页。
+> 重建說明：模式 page-aligned；來源 `book.xlsx`；共 4 表；原圖逐頁查看 4/4 頁。
 
 ## Sheet: Dashboard
 
-源页：Sheet "Dashboard"
+源頁：Sheet "Dashboard"
 
-### 页面目的
+### 頁面目的
 
 - ...
 
-### 布局地图
+### 佈局地圖
 
-- 顶部 KPI 卡片：
-- 左侧筛选器：
-- 主图表：
-- 底部明细表：
+- 頂部 KPI 卡片：
+- 左側篩選器：
+- 主圖表：
+- 底部明細表：
 
-### 按区域确认内容
+### 按區域確認內容
 
-...（含图表与公式；数据表优先字段、单位、公式、筛选与数据质量说明）
+...（含圖表與公式；數據表優先字段、單位、公式、篩選與數據質量說明）
 
-### 视觉备注
+### 視覺備註
 
 - ...
 
@@ -110,7 +110,7 @@ Rules:
 
 - Use `## Sheet: Name` for workbook structure; the four H3 labels stay identical to the page route.
 - For dashboard-like sheets, treat regions exactly like a slide.
-- For data sheets, 按区域确认内容 prioritizes table fields, units, formulas, filters, and data quality notes.
+- For data sheets, 按區域確認內容 prioritizes table fields, units, formulas, filters, and data quality notes.
 - For financial or operational models, preserve assumptions, calculation flow, dependencies, and outputs.
 
 ## Transcribed Markdown (`transcribe` mode, scanned documents)
@@ -120,34 +120,34 @@ Default deliverable for scanned books, forms, and budget/reference documents whe
 Template:
 
 ```markdown
-# 文档标题
+# 文件標題
 
-> 重建说明：模式 transcribe；来源 `scanned-book.pdf`；共 52 页；原图逐页查看 52/52 页。
-> 补充：内容由视觉模型分批直读原图转写（10 页/批并行）。
+> 重建說明：模式 transcribe；來源 `scanned-book.pdf`；共 52 頁；原圖逐頁查看 52/52 頁。
+> 補充：內容由視覺模型分批直讀原圖轉寫（10 頁/批並行）。
 
-## Page 01: 第 01 页
+## Page 01: 第 01 頁
 
-源图：[page-01.png](pages/page-01.png)
+源圖：[page-01.png](pages/page-01.png)
 
-<该页全部文字 1:1 转写，跟随原文语言>
+<該頁全部文字 1:1 轉寫，跟隨原文語言>
 
 | รายการ | หน่วยนับ | จำนวน |
 | --- | --- | --- |
 | ... | คน | 12,500 |
 
-## Page 02: <页标题>
+## Page 02: <頁標題>
 
 ...
 ```
 
 Rules:
 
-- Page titles come from the visually confirmed heading; a page without a readable heading uses `## Page NN: 第 NN 页`. Never use raw OCR first-line garbage as a title.
+- Page titles come from the visually confirmed heading; a page without a readable heading uses `## Page NN: 第 NN 頁`. Never use raw OCR first-line garbage as a title.
 - Transcription must come from original-resolution page images (vision-model direct reading preferred; tesseract fallback must be reconciled against the images).
 - Tables become Markdown tables preserving empty cells and dash-only (`-`) placeholders — never full-page code fences. After concatenating batches, run `python3 scripts/fix_tables.py <file>`.
-- Merged cells follow the LOCKED rules in `references/visual-transcription-rules.md`: 跨列合并=每个跨到的列重复内容；跨行合并=只写首行、后续行留空；多行表头=第一行做 Markdown 表头、其余表头行按序做正文首行。Never pick a different convention per run.
+- Merged cells follow the LOCKED rules in `references/visual-transcription-rules.md`: 跨列合併=每個跨到的列重複內容；跨行合併=只寫首行、後續行留空；多行表頭=第一行做 Markdown 表頭、其餘表頭行按序做正文首行。Never pick a different convention per run.
 - Unreliable readings (amounts, units, small labels) are marked `[?]` inline.
-- Degraded pages (quota fallback, reference-file transcription, crashed batch) are listed by page number in the reconstruction note, and the `原图逐页查看 N/M` count excludes them.
+- Degraded pages (quota fallback, reference-file transcription, crashed batch) are listed by page number in the reconstruction note, and the `原圖逐頁查看 N/M` count excludes them.
 - Validate with `check_output.py --expected-pages N` WITHOUT `--require-visual-sections`.
 
 ## Translated Deliverable
@@ -160,7 +160,7 @@ Only when the user requests a translation. Filename: `source.calibrated.<lang>.m
 
 ## Outline Markdown
 
-Purpose: the required second deliverable when the user asks for an outline, 大纲版, or two final Markdown files.
+Purpose: the required second deliverable when the user asks for an outline, 大綱版, or two final Markdown files.
 
 Filename: `source.outline.md`
 
@@ -173,29 +173,29 @@ Rules:
 Locked skeleton (headers always these Chinese strings):
 
 ```markdown
-# 文档标题 - 大纲
+# 文件標題 - 大綱
 
-> 来源：`source.calibrated.md`（校准版）；原始文档 `source.ext`。
+> 來源：`source.calibrated.md`（校準版）；原始文件 `source.ext`。
 
-## 1. 核心主线
+## 1. 核心主線
 
 - ...
 
-## 2. 结构地图
+## 2. 結構地圖
 
-| 章节 | 来源页/表 | 作用 |
+| 章節 | 來源頁/表 | 作用 |
 | --- | --- | --- |
 
-## 3. 详细大纲
+## 3. 詳細大綱
 
-### 3.1 章节
+### 3.1 章節
 
-- 要点
-- 支撑页码
+- 要點
+- 支撐頁碼
 
-## 4. 关键证据
+## 4. 關鍵證據
 
-| 证据 | 来源 | 为什么重要 |
+| 證據 | 來源 | 為什麼重要 |
 | --- | --- | --- |
 ```
 

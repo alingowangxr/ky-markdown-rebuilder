@@ -29,14 +29,24 @@ def column_count(line: str) -> int:
     return line.count("|") - 1
 
 
+def split_row(line: str) -> list[str]:
+    stripped = line.strip()
+    if not is_table_line(stripped):
+        return [stripped]
+    return [cell.strip() for cell in stripped[1:-1].split("|")]
+
+
+def join_row(cells: list[str]) -> str:
+    return "|" + "|".join(cells) + "|"
+
+
 def pad_row(line: str, target_cols: int, is_separator: bool) -> str:
-    line = line.strip()
-    current = line.count("|") - 1
-    if current >= target_cols:
-        return line
-    needed = target_cols - current
-    padding = ("---|" if is_separator else "   |") * needed
-    return line + padding
+    cells = split_row(line)
+    if len(cells) >= target_cols:
+        return join_row(cells)
+    filler = "---" if is_separator else ""
+    cells.extend([filler] * (target_cols - len(cells)))
+    return join_row(cells)
 
 
 def is_table_line(line: str) -> bool:

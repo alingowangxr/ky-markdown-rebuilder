@@ -55,35 +55,35 @@ Language rules:
 Document header — the first lines of every calibrated file:
 
 ```markdown
-# <文档标题>
+# <文件標題>
 
-> 重建说明：模式 <fast|page-aligned|deep-visual|transcribe>；来源 `<源文件名>`；共 <M> 页；原图逐页查看 <N>/<M> 页。
+> 重建說明：模式 <fast|page-aligned|deep-visual|transcribe>；來源 `<源文件名>`；共 <M> 頁；原圖逐頁查看 <N>/<M> 頁。
 ```
 
-The `原图逐页查看 N/M` count must be TRUE: only pages opened at original resolution count. Contact-sheet thumbnails do NOT count as inspection. Never claim more inspection than actually happened; if only 10 of 50 pages were opened, write `10/50`.
+The `原圖逐頁查看 N/M` count must be TRUE: only pages opened at original resolution count. Contact-sheet thumbnails do NOT count as inspection. Never claim more inspection than actually happened; if only 10 of 50 pages were opened, write `10/50`.
 
-Page section template — identical for `## Page NN:` / `## Region NN:` / `## Screen NN:` routes; `## Sheet: 名称` uses the same four labels:
+Page section template — identical for `## Page NN:` / `## Region NN:` / `## Screen NN:` routes; `## Sheet: 名稱` uses the same four labels:
 
 ```markdown
-## Page 01: <页标题，跟随原文语言>
+## Page 01: <頁標題，跟隨原文語言>
 
-源图：[page-01.png](pages/page-01.png)
+源圖：[page-01.png](pages/page-01.png)
 
-### 页面目的
-
-- ...
-
-### 布局地图
+### 頁面目的
 
 - ...
 
-### 按区域确认内容
+### 佈局地圖
 
-#### 区域 1：<位置与形态，如 左侧 2x2 卡片区>
+- ...
+
+### 按區域確認內容
+
+#### 區域 1：<位置與形態，如 左側 2x2 卡片區>
 
 ...
 
-### 视觉备注
+### 視覺備註
 
 - ...
 ```
@@ -91,27 +91,27 @@ Page section template — identical for `## Page NN:` / `## Region NN:` / `## Sc
 Transcribe-mode page template (`transcribe` mode only — 1:1 content reproduction, no visual commentary):
 
 ```markdown
-## Page 01: <页标题；无标题页用 第 01 页>
+## Page 01: <頁標題；無標題頁用 第 01 頁>
 
-源图：[page-01.png](pages/page-01.png)
+源圖：[page-01.png](pages/page-01.png)
 
-<该页全部内容 1:1 转写：正文按原文语言，表格转 Markdown 表，保留空单元格与 "-" 占位>
+<該頁全部內容 1:1 轉寫：正文按原文語言，表格轉 Markdown 表，保留空單元格與 "-" 佔位>
 ```
 
 Contract details:
 
-- The only accepted section labels are `### 页面目的`, `### 布局地图`, `### 按区域确认内容`, `### 视觉备注` — exact spelling, H3 level, no colon suffix. English labels (`Page purpose` etc.) and bare-text labels (`页面目的:`) are contract violations. (`transcribe` mode omits the four sections entirely — never mix the two shapes in one file.)
-- Region subsections under 按区域确认内容 use `#### 区域 N：<位置>` (full-width colon inside this label is correct).
-- Source line: during validation use `源图：[page-NN.png](pages/page-NN.png)`. In the final deliverable (screenshots removed) replace with `源页：第 N 页` (PDF/scan), `源页：Slide NN` (PPT), or `源图：<原始输入文件名>` (single-image input). Every section has exactly one 源图/源页 line, directly under the `##` heading.
-- Screenshot links are always RELATIVE paths (`pages/page-01.png`). Absolute paths become dead links the moment the work folder moves or is cleaned; if the pages directory will not survive delivery, use 源页 notes instead of links.
+- The only accepted section labels are `### 頁面目的`, `### 佈局地圖`, `### 按區域確認內容`, `### 視覺備註` — exact spelling, H3 level, no colon suffix. English labels (`Page purpose` etc.) and bare-text labels (`頁面目的:`) are contract violations. (`transcribe` mode omits the four sections entirely — never mix the two shapes in one file.)
+- Region subsections under 按區域確認內容 use `#### 區域 N：<位置>` (full-width colon inside this label is correct).
+- Source line: during validation use `源圖：[page-NN.png](pages/page-NN.png)`. In the final deliverable (screenshots removed) replace with `源頁：第 N 頁` (PDF/scan), `源頁：Slide NN` (PPT), or `源圖：<原始輸入文件名>` (single-image input). Every section has exactly one 源圖/源頁 line, directly under the `##` heading.
+- Screenshot links are always RELATIVE paths (`pages/page-01.png`). Absolute paths become dead links the moment the work folder moves or is cleaned; if the pages directory will not survive delivery, use 源頁 notes instead of links.
 - Title/transition pages may keep each section to a single bullet, but all four sections stay present in page-aligned/deep-visual outputs.
-- 视觉备注 must be page-specific. The checker fails when the identical note line appears on 3+ pages. Do not rotate canned sentences.
+- 視覺備註 must be page-specific. The checker fails when the identical note line appears on 3+ pages. Do not rotate canned sentences.
 - Never wrap page body in a full-page code fence. Code fences are only for actual code or verbatim ASCII art. Tables become Markdown tables; the checker fails oversized fences.
 - Every table needs a blank line before it. A table glued to the preceding text line (`หน่วย : ล้านบาท` directly above `| ... |`) renders as plain text, not a table. `scripts/fix_tables.py` inserts the missing blank lines; the checker fails glued tables.
 - Chemistry/math notation uses `<sub>`/`<sup>` (e.g. H<sub>2</sub>O, Zn + H<sub>2</sub>SO<sub>4</sub>), never code fences, never bare-text approximations.
 - Never use HTML whitespace entities (`&nbsp;`, `&emsp;`, `&ensp;`, `&thinsp;`) to imitate the source's indentation or alignment — they render as garbage in plain-Markdown viewers. Visual indentation is layout, not content: drop it, or express structure with lists/blockquotes/tables. The checker fails any occurrence.
-- If the source page has no readable title, use `## Page NN: 第 NN 页` — never paste raw OCR garbage as the title.
-- Do not invent an H1 title. If the document has no visible title, derive one and mark it: `# <自拟标题>（自拟）`.
+- If the source page has no readable title, use `## Page NN: 第 NN 頁` — never paste raw OCR garbage as the title.
+- Do not invent an H1 title. If the document has no visible title, derive one and mark it: `# <自擬標題>（自擬）`.
 
 Filenames:
 
@@ -163,22 +163,22 @@ Trigger: `pdfinfo`/pypdf shows no text layer, or extraction yields ~0 characters
 
 Engine priority — vision model first, tesseract second:
 
-1. **Vision-model direct reading (preferred).** If the host model or its subagents can read images (Claude, Gemini/Antigravity, GPT-vision), render pages at high DPI and transcribe directly from the original-resolution page images. This beats tesseract decisively on Thai, handwriting, small fonts, and complex tables. Proven pattern for 100+ page documents: split into batches of ~10 pages, one parallel subagent per batch, each instructed to transcribe 1:1 — preserve Thai/original text exactly; convert every table to a Markdown table keeping empty cells and dash-only (`-`) placeholders; handle merged cells by the LOCKED rules (跨列=每列重复内容, 跨行=只写首行其余留空, 多行表头=第一行做表头其余行做正文首行 — see `references/visual-transcription-rules.md`) — then concatenate batches in page order and run `scripts/fix_tables.py` to normalize ragged table rows. Give every subagent an ABSOLUTE output path under `.ky-md-work/<source-name>/` (e.g. `/full/path/.ky-md-work/doc/batch_01_10.md`); relative or improvised batch paths scatter fragments that the parent must hunt down and reassemble.
+1. **Vision-model direct reading (preferred).** If the host model or its subagents can read images (Claude, Gemini/Antigravity, GPT-vision), render pages at high DPI and transcribe directly from the original-resolution page images. This beats tesseract decisively on Thai, handwriting, small fonts, and complex tables. Proven pattern for 100+ page documents: split into batches of ~10 pages, one parallel subagent per batch, each instructed to transcribe 1:1 — preserve Thai/original text exactly; convert every table to a Markdown table keeping empty cells and dash-only (`-`) placeholders; handle merged cells by the LOCKED rules (跨列=每列重複內容, 跨行=只寫首行其餘留空, 多行表頭=第一行做表頭其餘行做正文首行 — see `references/visual-transcription-rules.md`) — then concatenate batches in page order and run `scripts/fix_tables.py` to normalize ragged table rows. Give every subagent an ABSOLUTE output path under `.ky-md-work/<source-name>/` (e.g. `/full/path/.ky-md-work/doc/batch_01_10.md`); relative or improvised batch paths scatter fragments that the parent must hunt down and reassemble.
 2. **Tesseract fallback.** Only when no vision-capable model is available: check `tesseract --list-langs` first; if the document language pack is missing, tell the user and ASK before installing anything (e.g. `brew install tesseract-lang`) — never silently install software. OCR output must still be reconciled against original-resolution images for every page with tables, forms, or money amounts.
 3. **Neither available: STOP and report.** Do not deliver a thumbnail-based "reconstruction" and do not transcribe from low-resolution contact sheets.
 
 Rules for both engines:
 
 - Tables become Markdown tables — never dump a page into a code fence. Unreliable readings (amounts, units, small labels) are marked `[?]` inline rather than silently guessed.
-- Degraded pages must be declared: if quota exhaustion, a crashed batch, or any fallback means some pages were NOT transcribed from original-resolution images (e.g. rebuilt from a reference file or a text dump), list those page numbers in the reconstruction note (`> 补充：第 91-99 页因配额耗尽由脚本兜底，未经视觉核对。`) and reduce the `原图逐页查看 N/M` count accordingly. Silent fallback is the single biggest trust-killer in past runs.
-- If a reference/companion document is provided by the user, transcribing it is NOT reconstruction: every page taken from the reference instead of the image must be flagged as `内容来自参考文件，未逐页核图`.
+- Degraded pages must be declared: if quota exhaustion, a crashed batch, or any fallback means some pages were NOT transcribed from original-resolution images (e.g. rebuilt from a reference file or a text dump), list those page numbers in the reconstruction note (`> 補充：第 91-99 頁因配額耗盡由腳本兜底，未經視覺核對。`) and reduce the `原圖逐頁查看 N/M` count accordingly. Silent fallback is the single biggest trust-killer in past runs.
+- If a reference/companion document is provided by the user, transcribing it is NOT reconstruction: every page taken from the reference instead of the image must be flagged as `內容來自參考文件，未逐頁核圖`.
 
 ## Workflow
 
 1. Preflight once per session: `python3 scripts/preflight.py`. It reports which tools exist (markitdown, pdftoppm, pdfinfo, soffice, tesseract + language packs, PIL/pypdf) so the pipeline never discovers missing tools mid-run. Plan around what is actually available; use `python3`, never `python`.
 2. Establish deliverables and output path before conversion:
    - default: create `source.calibrated.md`;
-   - if the user mentions `outline`, `大纲`, `大纲版`, `two files`, `两个文件`, or asks to generate a version based on the calibrated Markdown, create both `source.calibrated.md` and `source.outline.md`;
+   - if the user mentions `outline`, `大綱`, `大綱版`, `two files`, `兩個文件`, or asks to generate a version based on the calibrated Markdown, create both `source.calibrated.md` and `source.outline.md`;
    - do not finish the task until every requested deliverable exists.
 3. Extract a raw text Markdown draft using MarkItDown or the best local extractor. If the text layer is empty, switch to the Scanned-Document route above.
 4. Render visual references into `.ky-md-work/<source-name>/pages/`:
@@ -191,17 +191,17 @@ Rules for both engines:
    - contact sheets / thumbnail grids are for TRIAGE ONLY (deciding what to look at); transcribing content from a thumbnail is a contract violation;
    - every page ranked high or medium priority in the manifest must be opened at ORIGINAL resolution before its section is written;
    - in `deep-visual` and `transcribe` modes, every page with tables, diagrams, KPI numbers, or dense text must be opened at original resolution (in `transcribe` the transcription itself must come from the original-resolution image);
-   - keep a running count of pages actually opened — it goes into the reconstruction note as `原图逐页查看 N/M 页`, truthfully.
+   - keep a running count of pages actually opened — it goes into the reconstruction note as `原圖逐頁查看 N/M 頁`, truthfully.
 7. Rebuild Markdown using the locked Output Contract templates. Write pages in batches after inspecting them; do not write the whole document in one pass before inspection is complete. Convert visual structures using `references/visual-transcription-rules.md`.
 8. Validate with `scripts/check_output.py`:
    - always pass `--expected-pages N` when the page count is known and `--pages-dir` while screenshots exist;
    - for `page-aligned` and `deep-visual` outputs also pass `--require-visual-sections` (`transcribe` outputs must NOT pass it — they have no four-section template);
-   - paste the checker output into your reply; a failing check blocks delivery.
+    - paste the checker output into your reply; a failing check blocks delivery.
 9. If an outline was requested in step 2, generate `source.outline.md` from the calibrated version and re-check that both final files exist.
-10. Finalize the deliverable: if the user wants no screenshot links, replace every `源图：[...](...)` line with the matching `源页：` note, then rerun `check_output.py` on the final file.
+10. Finalize the deliverable: if the user wants no screenshot links, replace every `源圖：[...](...)` line with the matching `源頁：` note, then rerun `check_output.py` on the final file.
 11. Cleanup — timing matters:
     - NEVER delete rendered pages before the deliverable message is sent; premature cleanup has forced full re-renders when the user pushed back;
-    - after delivering, keep `.ky-md-work/<source-name>/` in place and tell the user: 中间截图与工作文件保留在 `.ky-md-work/<name>/`，确认内容无误后可以删除（或让我删除）;
+    - after delivering, keep `.ky-md-work/<source-name>/` in place and tell the user: 中間截圖與工作文件保留在 `.ky-md-work/<name>/`，確認內容無誤後可以刪除（或讓我刪除）;
     - delete only after the user confirms or explicitly asks.
 
 ## Page Manifest
@@ -250,26 +250,26 @@ When requested, create an outline file from the calibrated Markdown, not from ra
 Locked outline skeleton (headers always these Chinese strings; body language follows the source):
 
 ```markdown
-# <文档标题> - 大纲
+# <文件標題> - 大綱
 
-> 来源：`source.calibrated.md`（校准版）；原始文档 `source.ext`。
+> 來源：`source.calibrated.md`（校準版）；原始文件 `source.ext`。
 
-## 1. 核心主线
+## 1. 核心主線
 
 - ...
 
-## 2. 结构地图
+## 2. 結構地圖
 
-| 章节 | 来源页/表 | 作用 |
+| 章節 | 來源頁/表 | 作用 |
 | --- | --- | --- |
 
-## 3. 详细大纲
+## 3. 詳細大綱
 
 ### 3.1 ...
 
-## 4. 关键证据
+## 4. 關鍵證據
 
-| 证据 | 来源 | 为什么重要 |
+| 證據 | 來源 | 為什麼重要 |
 | --- | --- | --- |
 ```
 
@@ -290,18 +290,18 @@ Use scripts as mechanical helpers; do not load their source unless you need to e
 
 A page-aligned output is not acceptable if it only summarizes each page. For visual decks and solution proposals, each page section must include enough visual guidance that a reader can reconstruct the slide's information architecture.
 
-Minimum contract per page: the locked four sections, one 源图/源页 line, region-grouped confirmed text, visual relationships (highlighted columns, center nodes, arrows, callouts, before/after areas, image roles), and an uncertainty note only when text or logos are not reliably legible.
+Minimum contract per page: the locked four sections, one 源圖/源頁 line, region-grouped confirmed text, visual relationships (highlighted columns, center nodes, arrows, callouts, before/after areas, image roles), and an uncertainty note only when text or logos are not reliably legible.
 
 Before final delivery, verify:
 
 - Does every page section follow the locked template exactly (labels, levels, source line)?
-- Is the `原图逐页查看 N/M` claim in the header truthful?
+- Is the `原圖逐頁查看 N/M` claim in the header truthful?
 - Could a reader tell where the text appeared on the slide?
 - Are product images, diagrams, callouts, and highlighted areas described?
 - Are dense pages structured as tables, region groups, or ordered steps instead of loose bullets?
 - Did the output avoid merging adjacent slide content?
-- Did it avoid generic filler ("主体区域承载段落、卡片或图示信息") when the actual regions are visible?
-- Did it avoid rotating canned 视觉备注 sentences across pages?
+- Did it avoid generic filler ("主體區域承載段落、卡片或圖示資訊") when the actual regions are visible?
+- Did it avoid rotating canned 視覺備註 sentences across pages?
 
 For `page-aligned` and `deep-visual` outputs, run:
 
@@ -322,9 +322,9 @@ Load references only when needed:
 - Treat page-aligned Markdown as the source of truth.
 - Do not merge adjacent pages unless the output mode is explicitly `reading`.
 - Do not invent unreadable small text, logos, chart labels, or screenshot details.
-- Mark uncertain visual details as `无法可靠辨认` or omit them.
+- Mark uncertain visual details as `無法可靠辨認` or omit them.
 - Never claim inspection that did not happen: reconstruction notes report the true original-resolution page count, and reference-file transcription is flagged per page.
-- Keep screenshot links for visual verification while intermediate evidence is retained; in deliverable-only mode, use the locked 源页 notes instead.
+- Keep screenshot links for visual verification while intermediate evidence is retained; in deliverable-only mode, use the locked 源頁 notes instead.
 - Prefer tables for timelines, matrices, repeated item grids, and comparison layouts.
 - Prefer module + relationship lists for architecture diagrams.
-- If you correct an OCR/reference error (e.g. a garbled patent number), list every correction in 视觉备注 so the user can audit it.
+- If you correct an OCR/reference error (e.g. a garbled patent number), list every correction in 視覺備註 so the user can audit it.

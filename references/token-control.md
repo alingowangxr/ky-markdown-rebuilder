@@ -17,7 +17,7 @@ Thumbnail grids (contact sheets) are a cheap way to decide WHICH pages need atte
 
 - transcribing text, numbers, or table contents from a thumbnail is a contract violation — small text read from a 300px-wide thumbnail is guesswork;
 - every page whose section you write in `deep-visual` or `ocr` mode must have been opened at original resolution;
-- pages skipped at original resolution reduce the `原图逐页查看 N/M` count in the reconstruction note — report it truthfully instead of inflating coverage.
+- pages skipped at original resolution reduce the `原圖逐頁查看 N/M` count in the reconstruction note — report it truthfully instead of inflating coverage.
 
 If a document is too large to inspect every page (e.g. 86 image-only pages), say so and agree on scope with the user instead of silently downgrading to thumbnails.
 

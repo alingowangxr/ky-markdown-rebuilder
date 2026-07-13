@@ -4,14 +4,14 @@
 Enforced (always):
 - section headings: ## Page NN / ## Region NN / ## Screen NN / ## Sheet: Name
 - no duplicate numbered headings; optional --expected-pages coverage
-- every numbered/sheet section has exactly one source line (源图：/源页：)
-- reconstruction-note header line (> 重建说明：... 原图逐页查看 N/M 页)
+- every numbered/sheet section has exactly one source line (源圖：/源頁：)
+- reconstruction-note header line (> 重建說明：... 原圖逐頁查看 N/M 頁)
 - screenshot links resolve when --pages-dir is given
 
 Enforced with --require-visual-sections:
-- exact Chinese H3 labels: ### 页面目的 / ### 布局地图 / ### 按区域确认内容 / ### 视觉备注
+- exact Chinese H3 labels: ### 頁面目的 / ### 佈局地圖 / ### 按區域確認內容 / ### 視覺備註
 - rejection of legacy label styles (English labels, bare-text labels with colons)
-- canned-sentence repetition in 视觉备注 across pages
+- canned-sentence repetition in 視覺備註 across pages
 - full-page code-fence dumps
 - generic layout/visual-note template detection
 """
@@ -24,28 +24,29 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-REQUIRED_LABELS = ["页面目的", "布局地图", "按区域确认内容", "视觉备注"]
+REQUIRED_LABELS = ["頁面目的", "佈局地圖", "按區域確認內容", "視覺備註"]
 
 LEGACY_LABEL_PATTERNS = [
     (r"^#{2,6}\s*(Page purpose|Layout map|Confirmed content by region|Visual notes)\b", "english heading label"),
     (r"^\s*(Page purpose|Layout map|Confirmed content by region|Visual notes)\s*[:：]", "english bare-text label"),
-    (r"^\s*(页面目的|布局地图|按区域确认内容|视觉备注)\s*[:：]", "bare-text label with colon (must be H3 heading)"),
-    (r"^#{4,6}\s*(页面目的|布局地图|按区域确认内容|视觉备注)\s*$", "wrong heading level (must be H3)"),
+    (r"^\s*(頁面目的|佈局地圖|按區域確認內容|視覺備註)\s*[:：]", "bare-text label with colon (must be H3 heading)"),
+    (r"^#{4,6}\s*(頁面目的|佈局地圖|按區域確認內容|視覺備註)\s*$", "wrong heading level (must be H3)"),
 ]
 
 GENERIC_LAYOUT_PATTERNS = [
-    "顶部或左上区域为页标题",
-    "主体区域承载段落、条目、卡片或图示信息",
-    "页脚/角标保留品牌识别",
-    "页眉、页脚、品牌 Logo 与装饰性背景用于版式识别",
-    "若本页包含图标、卡片或分栏",
+    "頂部或左上區域為頁標題",
+    "主體區域承載段落、條目、卡片或圖示資訊",
+    "頁腳/角標保留品牌識別",
+    "頁眉、頁腳、品牌 Logo 與裝飾性背景用於版式識別",
+    "若本頁包含圖標、卡片或分欄",
 ]
 
 SECTION_HEADING_RE = re.compile(
     r"^## (?:(Page|Region|Screen)\s+(\d+)\b.*|Sheet:\s*(.+?)\s*)$", flags=re.MULTILINE
 )
-SOURCE_LINE_RE = re.compile(r"^源[图页]：", flags=re.MULTILINE)
-RECON_NOTE_RE = re.compile(r"^> 重建说明：.*原图逐页查看\s*\d+\s*/\s*\d+\s*页", flags=re.MULTILINE)
+SOURCE_LINE_RE = re.compile(r"^源[圖頁]：", flags=re.MULTILINE)
+SOURCE_LINK_RE = re.compile(r"\]\(([^)]+)\)")
+RECON_NOTE_RE = re.compile(r"^> 重建說明：.*原圖逐頁查看\s*\d+\s*/\s*\d+\s*頁", flags=re.MULTILINE)
 
 
 def parse_args() -> argparse.Namespace:
@@ -62,7 +63,7 @@ def parse_args() -> argparse.Namespace:
         "--require-visual-sections",
         action="store_true",
         help="Require the locked Chinese H3 labels in every section: "
-        "### 页面目的 / ### 布局地图 / ### 按区域确认内容 / ### 视觉备注.",
+        "### 頁面目的 / ### 佈局地圖 / ### 按區域確認內容 / ### 視覺備註.",
     )
     return parser.parse_args()
 
@@ -131,7 +132,7 @@ def generic_reconstruction_failures(section: str) -> list[str]:
     if len(generic_hits) >= 2:
         failures.append("generic layout/visual-note template detected")
 
-    raw_text_heading = re.search(r"^#{3,6}\s*页面文本（按视觉阅读顺序）", section, flags=re.MULTILINE)
+    raw_text_heading = re.search(r"^#{3,6}\s*頁面文本（按視覺閱讀順序）", section, flags=re.MULTILINE)
     if raw_text_heading:
         raw_text_body = section[raw_text_heading.end() :]
         next_heading = re.search(r"^#{3,6}\s+", raw_text_body, flags=re.MULTILINE)
@@ -145,7 +146,7 @@ def generic_reconstruction_failures(section: str) -> list[str]:
 
 
 def visual_note_lines(section: str) -> list[str]:
-    match = re.search(r"^### 视觉备注\s*$", section, flags=re.MULTILINE)
+    match = re.search(r"^### 視覺備註\s*$", section, flags=re.MULTILINE)
     if not match:
         return []
     body = section[match.end() :]
@@ -158,6 +159,43 @@ def visual_note_lines(section: str) -> list[str]:
         if len(stripped) >= 8:
             lines.append(stripped)
     return lines
+
+
+def first_nonempty_line(text: str) -> str:
+    for line in text.splitlines():
+        if line.strip():
+            return line.strip()
+    return ""
+
+
+def source_line_text(section: str) -> str:
+    for line in section.splitlines():
+        if line.startswith("源圖：") or line.startswith("源頁："):
+            return line.strip()
+    return ""
+
+
+def source_line_is_immediate(section: str) -> bool:
+    first = first_nonempty_line(section)
+    return bool(first) and (first.startswith("源圖：") or first.startswith("源頁："))
+
+
+def expected_source_link(kind: str, ident: str, line: str) -> str | None:
+    if kind == "Sheet":
+        return None
+    if "](pages/" not in line:
+        return None
+    match = SOURCE_LINK_RE.search(line)
+    if not match:
+        return None
+    link = match.group(1).replace("\\", "/")
+    if not re.search(r"/?page-\d+\.(?:png|jpg|jpeg|webp)$", link, flags=re.IGNORECASE):
+        return None
+    width = max(2, len(ident))
+    expected = f"page-{int(ident):0{width}d}"
+    if not re.search(rf"(^|/){re.escape(expected)}\.(?:png|jpg|jpeg|webp)$", link, flags=re.IGNORECASE):
+        return expected
+    return None
 
 
 def main() -> None:
@@ -199,6 +237,12 @@ def main() -> None:
         print(f"extra pages: {extra}")
         ok = ok and not missing and not extra
 
+        if numbered and all(kind != "Sheet" for kind, _, _ in numbered):
+            sequence = [int(ident) for _, ident, _ in numbered]
+            if sequence != sorted(sequence):
+                ok = False
+                print(f"numbered sections out of order: {sequence}")
+
     # Reconstruction-note header.
     if parsed:
         if RECON_NOTE_RE.search(text):
@@ -206,7 +250,7 @@ def main() -> None:
         else:
             ok = False
             print("reconstruction note missing or malformed "
-                  "(expected: > 重建说明：模式 ...；来源 `...`；共 M 页；原图逐页查看 N/M 页。)")
+                  "(expected: > 重建說明：模式 ...；來源 `...`；共 M 頁；原圖逐頁查看 N/M 頁。)")
         if re.search(r"^## Page\s+\d+：", text, flags=re.MULTILINE):
             ok = False
             print("full-width colon detected in page heading (use '## Page NN: Title')")
@@ -255,7 +299,17 @@ def main() -> None:
     for kind, ident, body in parsed:
         count = len(SOURCE_LINE_RE.findall(body))
         if count != 1:
-            source_failures.append(f"{kind} {ident}: {count} source lines (expected exactly 1 源图：/源页： line)")
+            source_failures.append(f"{kind} {ident}: {count} source lines (expected exactly 1 源圖：/源頁： line)")
+            continue
+        if not source_line_is_immediate(body):
+            source_failures.append(f"{kind} {ident}: source line must be the first non-empty line in the section")
+            continue
+        line = source_line_text(body)
+        expected_link = expected_source_link(kind, ident, line)
+        if expected_link is not None:
+            source_failures.append(
+                f"{kind} {ident}: screenshot link does not match section number (expected {expected_link})"
+            )
     print(f"source-line failures: {len(source_failures)}")
     for failure in source_failures:
         print(failure)
@@ -288,7 +342,7 @@ def main() -> None:
             shown = dead_relative_links[:5]
             print(f"dead relative links ({len(dead_relative_links)}): image exists under --pages-dir "
                   f"but not at the written path, e.g. {shown} — fix the link path "
-                  "(relative to the .md file) or switch to 源页 notes")
+                  "(relative to the .md file) or switch to 源頁 notes")
         ok = ok and not missing_links and not dead_relative_links
 
     if args.require_visual_sections:
@@ -309,7 +363,7 @@ def main() -> None:
                 note_counter[line] += 1
         for line, count in note_counter.most_common():
             if count >= 3:
-                failures.append(f"canned 视觉备注 repeated on {count} pages: {line[:50]!r}")
+                failures.append(f"canned 視覺備註 repeated on {count} pages: {line[:50]!r}")
         print(f"visual section failures: {len(failures)}")
         for failure in failures:
             print(failure)

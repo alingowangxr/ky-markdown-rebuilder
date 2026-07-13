@@ -1,79 +1,79 @@
 # KY Markdown Rebuilder
 
-把视觉文档重建成**可核对、按页对齐、结构可靠的 Markdown**。
+把視覺文件重建成**可核對、按頁對齊、結構可靠的 Markdown**。
 
-它不是普通的“文件转 Markdown”工具，而是一套面向 Codex、Claude Code 和 Antigravity 的文档重建 Skill：先提取文本，再渲染原始页面，最后结合页面视觉结构校准内容，并通过脚本检查页数、格式、图片链接和输出契约。
+它不是普通的“文件轉 Markdown”工具，而是一套面向 Codex、Claude Code 和 Antigravity 的文件重建 Skill：先提取文本，再渲染原始頁面，最後結合頁面視覺結構校準內容，並通過腳本檢核頁數、格式、圖片連結和輸出契約。
 
-适合处理普通文本提取容易失真的资料，例如 PDF、PPT/PPTX、扫描件、长截图、报告、白皮书、课程资料、方案 deck，以及包含表格、流程图、架构图、时间线、卡片或多栏布局的文档。
+適合處理普通文本提取容易失真的資料，例如 PDF、PPT/PPTX、掃描件、長截圖、報告、白皮書、課程資料、方案 deck，以及包含表格、流程圖、架構圖、時間線、卡片或多欄佈局的文件。
 
-## 为什么用它
+## 為什麼用它
 
-普通转换工具通常只保留文本，容易出现阅读顺序错乱、跨页串内容、表格散架、图示关系丢失等问题。
+普通轉換工具通常只保留文本，容易出現閱讀順序錯亂、跨頁串內容、表格散架、圖示關係丟失等問題。
 
-KY Markdown Rebuilder 使用“文本提取 + 页面渲染 + 原图核对 + 机械验收”的方式重建文档：
+KY Markdown Rebuilder 使用“文本提取 + 頁面渲染 + 原圖核對 + 機械驗收”的方式重建文件：
 
-- 每页、每张 Slide 或每个视觉区域单独成节，避免相邻页面内容混在一起。
-- 保留标题、分栏、卡片、表格、流程、矩阵和图示关系。
-- 对视觉密集页面使用原始分辨率检查，而不是从缩略图猜内容。
-- 扫描件优先使用视觉模型逐页转写，无法使用时才回退到 Tesseract OCR。
-- 无法可靠辨认的金额、单位或小字会显式标记，不静默猜测。
-- 输出前运行检查器；格式漂移、缺页、死链接或表格错误会阻止交付。
-- 如实记录真正打开原图核对的页数，不把缩略图浏览算作逐页检查。
+- 每頁、每張 Slide 或每個視覺區域單獨成節，避免相鄰頁面內容混在一起。
+- 保留標題、分欄、卡片、表格、流程、矩陣和圖示關係。
+- 對視覺密集頁面使用原始解析度檢查，而不是從縮略圖猜內容。
+- 掃描件優先使用視覺模型逐頁轉寫，無法使用時才回退到 Tesseract OCR。
+- 無法可靠辨認的金額、單位或小字會顯式標記，不靜默猜測。
+- 輸出前運行檢核器；格式漂移、缺頁、死連結或表格錯誤會阻止交付。
+- 如實記錄真正打開原圖核對的頁數，不把縮略圖瀏覽算作逐頁檢查。
 
-## 支持的输入
+## 支持的輸入
 
-- PDF 报告、白皮书、手册、课程资料
+- PDF 報告、白皮書、手冊、課程資料
 - PPT / PPTX / slide deck / 方案文件
-- 扫描 PDF、拍照书页、图片型文档
-- Word 风格报告和图文混排文档
-- HTML 页面、本地网页导出
-- 长截图和单张复杂图片
-- 带图表、KPI 卡片或仪表盘的表格文件
+- 掃描 PDF、拍照書頁、圖片型文件
+- Word 風格報告和圖文混排文件
+- HTML 頁面、本地網頁導出
+- 長截圖和單張複雜圖片
+- 帶圖表、KPI 卡片或儀表盤的表格文件
 
-纯文本或结构简单的 Markdown 不需要使用本 Skill，直接转换更快。
+純文本或結構簡單的 Markdown 不需要使用本 Skill，直接轉換更快。
 
-## 输出模式
+## 輸出模式
 
-| 模式 | 适用场景 | 结果 |
+| 模式 | 適用場景 | 結果 |
 | --- | --- | --- |
-| `fast` | 以线性文本为主的文档 | 原始转换 + 轻量清理 |
-| `page-aligned` | PDF、报告、普通 deck、图文混排资料 | 每页一个 Markdown 区块 |
-| `deep-visual` | 高风险、视觉密集、销售或解决方案 deck | 逐页原图检查 + 视觉结构重建 |
-| `transcribe` | 扫描书籍、表格、预算或档案资料 | 按页 1:1 转写正文和表格，不添加版式评论 |
+| `fast` | 以線性文本為主的文件 | 原始轉換 + 輕量清理 |
+| `page-aligned` | PDF、報告、普通 deck、圖文混排資料 | 每頁一個 Markdown 區塊 |
+| `deep-visual` | 高風險、視覺密集、銷售或解決方案 deck | 逐頁原圖檢核 + 視覺結構重建 |
+| `transcribe` | 掃描書籍、表格、預算或檔案資料 | 按頁 1:1 轉寫正文和表格，不添加版式評論 |
 
-如果需要更适合连续阅读的文章版，可以在 `page-aligned` 校准版完成后继续生成 `reading` 版本；不会直接从未经校准的原始提取结果生成。
+如果需要更適合連續閱讀的文章版，可以在 `page-aligned` 校準版完成後繼續生成 `reading` 版本；不會直接從未經校準的原始提取結果生成。
 
-## 默认产物
+## 默認產物
 
-默认生成：
+默認生成：
 
 ```text
 source.calibrated.md
 ```
 
-如果用户要求“大纲”“outline”或“两个文件”，还会生成：
+如果用戶要求“大綱”“outline”或“兩個文件”，還會生成：
 
 ```text
 source.outline.md
 ```
 
-如需翻译版，会单独生成：
+如需翻譯版，會單獨生成：
 
 ```text
 source.calibrated.zh.md
 ```
 
-翻译版从校准版生成，并回到原始页面抽查；不会把翻译混进原文校准文件。
+翻譯版從校準版生成，並回到原始頁面抽查；不會把翻譯混進原文校準文件。
 
-中间截图、原始提取、页清单和分批草稿统一保存在：
+中間截圖、原始提取、頁清單和分批草稿統一保存在：
 
 ```text
 .ky-md-work/<source-name>/
 ```
 
-这些证据文件会保留到用户确认结果无误后再删除。
+這些證據文件會保留到用戶確認結果無誤後再刪除。
 
-## 安装
+## 安裝
 
 ### Codex
 
@@ -93,9 +93,9 @@ git clone https://github.com/KyrieCheungYep/ky-markdown-rebuilder.git \
 
 ### Antigravity
 
-把仓库复制到当前 workspace，在任务中要求 Agent 按仓库内的 `SKILL.md` 执行。
+把倉庫複製到當前 workspace，在任務中要求 Agent 按倉庫內的 `SKILL.md` 執行。
 
-### 更新已有安装
+### 更新已有安裝
 
 Codex：
 
@@ -109,94 +109,94 @@ Claude Code：
 git -C ~/.claude/skills/ky-markdown-rebuilder pull --ff-only
 ```
 
-## 环境预检
+## 環境預檢
 
-安装后建议先运行：
+安裝後建議先運行：
 
 ```bash
 python3 ~/.codex/skills/ky-markdown-rebuilder/scripts/preflight.py
 ```
 
-预检会报告当前环境是否具备：
+預檢會報告當前環境是否具備：
 
-- `pdftoppm` / `pdfinfo`：PDF 页渲染、页数和文本层检测
-- `soffice`：PPT/PPTX 转 PDF
+- `pdftoppm` / `pdfinfo`：PDF 頁渲染、頁數和文字層檢核
+- `soffice`：PPT/PPTX 轉 PDF
 - `markitdown`：原始文本提取
-- `tesseract`：扫描件 OCR 后备方案及已安装语言包
-- `PIL` / `pypdf`：图片处理和 PDF 文本层检查
+- `tesseract`：掃描件 OCR 後備方案及已安裝語言包
+- `PIL` / `pypdf`：圖片處理和 PDF 文字層檢核
 
-并非所有输入都需要全部工具。Skill 会根据文件类型和当前环境选择可用路线，不会在任务中途静默安装依赖。
+並非所有輸入都需要全部工具。Skill 會根據文件類型和當前環境選擇可用路線，不會在任務中途靜默安裝依賴。
 
 ## 使用方式
 
-在 Codex 或 Claude Code 中直接点名 Skill：
+在 Codex 或 Claude Code 中直接點名 Skill：
 
 ```text
-使用 $ky-markdown-rebuilder，把 proposal.pdf 重建成按页对齐的 Markdown。
+使用 $ky-markdown-rebuilder，把 proposal.pdf 重建成按頁對齊的 Markdown。
 ```
 
-视觉密集的方案或销售 deck：
+視覺密集的方案或銷售 deck：
 
 ```text
-使用 $ky-markdown-rebuilder，以 deep-visual 模式重建这个 PPTX，
-并额外生成一份 outline。
+使用 $ky-markdown-rebuilder，以 deep-visual 模式重建這個 PPTX，
+並額外生成一份 outline。
 ```
 
-扫描件 1:1 转写：
+掃描件 1:1 轉寫：
 
 ```text
-使用 $ky-markdown-rebuilder，把这份扫描 PDF 按原文逐页转写成 Markdown。
-表格保留为 Markdown 表格，不翻译，不要版式分析。
+使用 $ky-markdown-rebuilder，把這份掃描 PDF 按原文逐頁轉寫成 Markdown。
+表格保留為 Markdown 表格，不翻譯，不要版式分析。
 ```
 
-也可以直接用自然语言触发：
+也可以直接用自然語言觸發：
 
 ```text
-把这个视觉结构复杂的 PDF 重建成可核对的 Markdown，保留每页结构和表格。
+把這個視覺結構複雜的 PDF 重建成可核對的 Markdown，保留每頁結構和表格。
 ```
 
 ## 工作流程
 
 ```text
-环境预检
+環境預檢
   → 提取原始文本
-  → 渲染逐页原图
-  → 建立页清单并判断检查优先级
-  → 按原图重建 Markdown
-  → 运行输出检查器
-  → 交付校准版 / 大纲版
+  → 渲染逐頁原圖
+  → 建立頁清單並判斷檢核優先級
+  → 按原圖重建 Markdown
+  → 運行輸出檢核器
+  → 交付校準版 / 大綱版
 ```
 
-对于无文本层的扫描件，会切换到 `transcribe` 路线：优先从原始分辨率页面直接转写；只有在视觉模型不可用时才使用 Tesseract。
+對於無文字層的掃描件，會切換到 `transcribe` 路線：優先從原始解析度頁面直接轉寫；只有在視覺模型不可用時才使用 Tesseract。
 
-## 输出质量契约
+## 輸出質量契約
 
-`scripts/check_output.py` 会在交付前检查关键约束，包括：
+`scripts/check_output.py` 會在交付前檢核關鍵約束，包括：
 
-- 页码是否连续，页数是否完整
-- 每页是否有且只有一个来源行
-- 页面标题、固定结构标签和标点是否符合约定
-- 截图链接是否真实可用，链接位置是否与实际页面图片一致
-- 是否存在整页代码围栏、HTML 空白实体或无法渲染的表格
-- 是否重复使用空泛的版式套话或罐头式视觉备注
-- `deep-visual` / `page-aligned` 是否包含完整的页面结构信息
+- 頁碼是否連續，頁數是否完整
+- 每頁是否有且只有一個來源行
+- 頁面標題、固定結構標籤和標點是否符合約定
+- 截圖連結是否真實可用，連結位置是否與實際頁面圖片一致
+- 是否存在整頁代碼圍欄、HTML 空白實體或無法渲染的表格
+- 是否重複使用空泛的版式套話或罐頭式視覺備註
+- `deep-visual` / `page-aligned` 是否包含完整的頁面結構資訊
 
-检查失败时不应交付结果；先修正，再重新运行检查。
+檢核失敗時不應交付結果；先修正，再重新運行檢核。
 
-## 内置脚本
+## 內置腳本
 
-| 脚本 | 用途 |
+| 腳本 | 用途 |
 | --- | --- |
-| `scripts/preflight.py` | 检查文档处理工具和语言包 |
-| `scripts/render_pages.py` | 把 PDF、PPT、PPTX 渲染成逐页图片 |
-| `scripts/split_markdown_pages.py` | 按分页符或 Slide 标记拆分原始 Markdown |
-| `scripts/make_manifest.py` | 生成页码、标题、文本长度和视觉检查优先级清单 |
-| `scripts/check_output.py` | 检查页数、格式、链接和输出质量契约 |
-| `scripts/fix_tables.py` | 修复扫描件转写后列数不齐的 Markdown 表格 |
+| `scripts/preflight.py` | 檢核文件處理工具和語言包 |
+| `scripts/render_pages.py` | 把 PDF、PPT、PPTX 渲染成逐頁圖片 |
+| `scripts/split_markdown_pages.py` | 按分頁符或 Slide 標記拆分原始 Markdown |
+| `scripts/make_manifest.py` | 生成頁碼、標題、文本長度和視覺檢查優先級清單 |
+| `scripts/check_output.py` | 檢核頁數、格式、連結和輸出契約 |
+| `scripts/fix_tables.py` | 修復掃描件轉寫後列數不齊的 Markdown 表格 |
 
-所有脚本统一使用 `python3` 调用。
+所有腳本統一使用 `python3` 調用。
 
-## 目录结构
+## 目錄結構
 
 ```text
 ky-markdown-rebuilder/

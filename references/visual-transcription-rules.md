@@ -19,16 +19,16 @@ For visual decks, include the page map in the final output when it improves reli
 
 Page section fields are LOCKED (see Output Contract in SKILL.md). The only accepted labels, always as H3 headings, always these exact Chinese strings regardless of document language:
 
-- `### 页面目的`
-- `### 布局地图`
-- `### 按区域确认内容`（区域用 `#### 区域 N：<位置>` 分组）
-- `### 视觉备注`
+- `### 頁面目的`
+- `### 佈局地圖`
+- `### 按區域確認內容`（區域用 `#### 區域 N：<位置>` 分組）
+- `### 視覺備註`
 
 Title, transition, or mostly linear text pages keep all four sections but may reduce each to a single bullet.
 
 ## Forbidden Anti-Patterns
 
-Do not use a generic bucket such as `页面文本（按视觉阅读顺序）` for visually structured pages. If the page has cards, columns, KPI blocks, matrices, diagrams, or insight boxes, rebuild those structures directly.
+Do not use a generic bucket such as `頁面文本（按視覺閱讀順序）` for visually structured pages. If the page has cards, columns, KPI blocks, matrices, diagrams, or insight boxes, rebuild those structures directly.
 
 Avoid generic layout notes that could fit any page, such as:
 
@@ -86,7 +86,7 @@ These three rules are fixed — never choose a different convention per run:
 
 1. **Horizontal merge (跨列)**: repeat the merged content in EVERY spanned column of that row. `งบประมาณ` spanning 2 columns → `| งบประมาณ | งบประมาณ |`. Applies to header and body rows alike; column count must stay aligned.
 2. **Vertical merge (跨行)**: write the content in the FIRST row only; leave the corresponding cells in continuation rows EMPTY. Never repeat vertically-merged content in later rows — an empty cell means "merged from above", a repeated value reads as a second data point.
-3. **Multi-row header (多行表头)**: Markdown allows one header row, so the FIRST header row becomes the Markdown header; every remaining header row becomes the first body row(s), in original order. Do not fold multiple header rows into one cell with `<br>` and do not drop sub-header rows.
+3. **Multi-row header (多行表頭)**: Markdown allows one header row, so the FIRST header row becomes the Markdown header; every remaining header row becomes the first body row(s), in original order. Do not fold multiple header rows into one cell with `<br>` and do not drop sub-header rows.
 
 Example — a two-row header where columns 1-2 are vertically merged and two groups span horizontally:
 
@@ -187,10 +187,10 @@ Preserve arrows (↑ ↓ →), condition annotations above arrows as parenthetic
 
 ### Textbook / Educational Page
 
-- Keep the page's own content headings (表1-1, 实验1-2, 讨论) as `####` headings inside 按区域确认内容; do not replace the locked four-section skeleton with them.
+- Keep the page's own content headings (表1-1, 實驗1-2, 討論) as `####` headings inside 按區域確認內容; do not replace the locked four-section skeleton with them.
 - Boxed tips or callouts become `> **提示**` blockquotes.
 - An illustration is described in place: bold caption + one-line description of what the image shows. Never embed the whole source page screenshot as if it were the illustration.
-- Do not invent an H1 for a page that has none; follow the Output Contract rule (`# <自拟标题>（自拟）`).
+- Do not invent an H1 for a page that has none; follow the Output Contract rule (`# <自擬標題>（自擬）`).
 
 ## Uncertainty Rules
 

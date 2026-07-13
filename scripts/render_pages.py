@@ -98,10 +98,23 @@ def normalize_padding(out_dir: Path, prefix: str) -> None:
     if not numbered:
         return
     width = max(2, len(str(max(number for number, _ in numbered))))
+
+    # Rename in two stages so normalized targets cannot collide with still-to-be-renamed files.
+    staged: list[tuple[Path, Path]] = []
     for number, path in numbered:
         target = out_dir / f"{prefix}-{number:0{width}d}.png"
-        if path != target:
-            path.rename(target)
+        if path == target:
+            continue
+        temp = out_dir / f".{path.stem}.tmp{path.suffix}"
+        if temp.exists():
+            temp.unlink()
+        path.rename(temp)
+        staged.append((temp, target))
+
+    for temp, target in staged:
+        if target.exists():
+            target.unlink()
+        temp.replace(target)
 
 
 def render_pdf(pdf: Path, out_dir: Path, dpi: int, prefix: str) -> None:
